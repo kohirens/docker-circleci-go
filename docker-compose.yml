@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-    container:
+    node:
 #        image: 'kohirens/circleci-go:${BUILD_VER:-dev}'
         image: 'kohirens/circleci-go:${BUILD_VER:-dev}'
         build:

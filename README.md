@@ -1,12 +1,10 @@
 # Alpine CCI
 
-An image for CircleCI.
+A Golang image for CircleCI.
 
 ## Build
 
-**Windows**
-
-Linux/Mac/Windows
+For Linux, Mac, and Windows do:
 
 ```shell
 docker compose build --progress plain

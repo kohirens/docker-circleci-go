@@ -1,0 +1,82 @@
+version: 2.1
+
+orbs:
+    vro: kohirens/version-release@0.8.0
+
+parameters:
+    ssh-finger:
+        description: SSH fingerprint.
+        type: string
+        default: ""
+
+# Anchors
+default-work-env: &default-work-env
+    working_directory: ~/src
+    docker:
+        - image: docker:20.10.13-git
+    resource_class: medium
+
+default-env-vars: &default-env-vars
+    DKR_IMG_REPO: "kohirens/circleci-go"
+    DKR_CONTAINER: "circle-go-node-1"
+
+jobs:
+    build:
+        <<: *default-work-env
+        steps:
+            - checkout
+            - setup_remote_docker:
+                  version: 20.10.11
+            - run:
+                  name: Build Docker image
+                  command: |
+                      docker compose build --progress plain
+            - run:
+                  name: Run tests
+                  command: |
+                      docker-compose up -d
+                      docker exec -it "${DKR_CONTAINER}" go version
+                      docker-compose down
+            - persist_to_workspace:
+                  root: '.'
+                  paths: ["*"]
+
+    publish-image:
+        <<: *default-work-env
+        environment:
+            <<: *default-env-vars
+        steps:
+            - attach_workspace: { at: '.' }
+            - setup_remote_docker:
+                  version: 20.10.11
+            - run:
+                  name: Push Docker image
+                  command: |
+                      echo "${DKR_PASS}" | docker login -u "${DKR_USER}" --password-stdin
+                      docker push "${DKR_IMG_REPO}:${TAG}"
+
+workflows:
+    version: 2
+    pre-release:
+        jobs:
+            - co:
+                filters:
+                    branches:
+                        ignore: main
+
+    tagged-release:
+        jobs:
+            - vro/update-and-merge-changelog: #publish-changelog
+                  context: orb-publishing
+                  filters:
+                      branches:
+                          only: main
+                  pre-steps: [ checkout, attach_workspace: { at: '.' } ]
+                  sshFinger: << pipeline.parameters.ssh-finger >>
+            - vro/tag-and-release:
+                  requires: [ vro/update-and-merge-changelog ]
+                  context: orb-publishing
+                  pre-steps: [ checkout, attach_workspace: { at: '.' } ]
+            - publish-image:
+                  requires: [ vro/tag-and-release ]
+                  context: orb-publishing

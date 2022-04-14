@@ -34,4 +34,5 @@ RUN chmod +x /usr/local/bin/start.sh
 SHELL [ "bash" ]
 
 ENTRYPOINT [ ]
+
 CMD [ ]
