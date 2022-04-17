@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
     node:
-#        image: 'kohirens/circleci-go:${BUILD_VER:-dev}'
         image: 'kohirens/circleci-go:${BUILD_VER:-dev}'
         build:
             dockerfile: 'Dockerfile'

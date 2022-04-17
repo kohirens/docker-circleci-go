@@ -7,39 +7,37 @@ parameters:
     ssh-finger:
         description: SSH fingerprint.
         type: string
-        default: ""
+        default: "3e:01:4a:ba:a7:78:bc:2c:e1:1b:01:71:d5:d7:78:87"
 
 # Anchors
 default-work-env: &default-work-env
     working_directory: ~/src
     docker:
         - image: docker:20.10.13-git
-    resource_class: medium
+    resource_class: small
 
 default-env-vars: &default-env-vars
-    DKR_IMG_REPO: "kohirens/circleci-go"
-    DKR_CONTAINER: "circle-go-node-1"
+    DH_IMG_REPO: "kohirens/circleci-go"
+    DH_CONTAINER: "circle-go-node-1"
 
 jobs:
-    build:
+    build-n-test:
         <<: *default-work-env
+        environment:
+            <<: *default-env-vars
         steps:
             - checkout
             - setup_remote_docker:
                   version: 20.10.11
             - run:
-                  name: Build Docker image
+                  name: "Build Docker image"
                   command: |
-                      docker compose build --progress plain
+                      docker build --rm --no-cache -t "${DH_IMG_REPO}" .
             - run:
-                  name: Run tests
+                  name: "Test Docker image"
                   command: |
-                      docker-compose up -d
-                      docker exec -it "${DKR_CONTAINER}" go version
-                      docker-compose down
-            - persist_to_workspace:
-                  root: '.'
-                  paths: ["*"]
+                      docker run -it --rm "${DH_IMG_REPO}" go version
+                      docker run -it --rm "${DH_IMG_REPO}" git --version
 
     publish-image:
         <<: *default-work-env
@@ -52,14 +50,32 @@ jobs:
             - run:
                   name: Push Docker image
                   command: |
-                      echo "${DKR_PASS}" | docker login -u "${DKR_USER}" --password-stdin
-                      docker push "${DKR_IMG_REPO}:${TAG}"
+                      if [ ! -f ./tagged.txt ]; then
+                          echo "cannot publish a Docker image, release-tag file not found"
+                          exit 1
+                      fi
+                      export BUILD_VER=$(cat "tagged.txt")
+                      export DH_IMAGE="${DH_IMG_REPO}:${BUILD_VER}"
+                      echo "${DH_PASS}" | docker login -u "${DH_USER}" --password-stdin
+                      echo ""
+                      echo ""
+                      echo "Building ${DH_IMAGE}"
+                      docker build --rm -t "${DH_IMAGE}" .
+                      echo ""
+                      echo ""
+                      echo "Building ${DH_IMAGE}"
+                      docker push "${DH_IMAGE}"
+                      echo ""
+                      echo ""
+                      echo "Building ${DH_IMAGE}"
+                      docker rmi "${DH_IMAGE}"
 
 workflows:
     version: 2
     pre-release:
         jobs:
-            - co:
+            - build-n-test:
+                context: orb-publishing
                 filters:
                     branches:
                         ignore: main
