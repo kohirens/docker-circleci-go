@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-    vro: kohirens/version-release@0.8.1
+    vro: kohirens/version-release@1.0.0
 
 parameters:
     ssh-finger:
@@ -82,7 +82,7 @@ workflows:
 
     tagged-release:
         jobs:
-            - vro/update-and-merge-changelog: #publish-changelog
+            - vro/publish-changelog: #publish-changelog
                   context: orb-publishing
                   filters:
                       branches:
@@ -90,7 +90,7 @@ workflows:
                   pre-steps: [ checkout, attach_workspace: { at: '.' } ]
                   sshFinger: << pipeline.parameters.ssh-finger >>
             - vro/tag-and-release:
-                  requires: [ vro/update-and-merge-changelog ]
+                  requires: [ vro/publish-changelog ]
                   context: orb-publishing
                   pre-steps: [ checkout, attach_workspace: { at: '.' } ]
             - publish-image:
