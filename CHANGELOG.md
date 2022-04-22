@@ -8,6 +8,7 @@
 - CircleCI Go image.
 
 ### Changed
+- Upgrade to VRO 1.0.4.
 - Upgraded to version release Orb version 1.0.3.
 - Upgraded to version release orb to 1.0.1.
 
