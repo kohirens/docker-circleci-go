@@ -44,6 +44,7 @@ jobs:
         environment:
             <<: *default-env-vars
         steps:
+            - checkout
             - attach_workspace: { at: '.' }
             - setup_remote_docker:
                   version: 20.10.11
