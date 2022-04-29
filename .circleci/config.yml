@@ -20,6 +20,12 @@ default-env-vars: &default-env-vars
     DH_IMG_REPO: "kohirens/circleci-go"
     DH_CONTAINER: "circle-go-node-1"
 
+filter-semantic-tag: &filter-semantic-tag
+    tags:
+        only: /^v?\d+\.\d+\.\d+$/
+    branches:
+        ignore: /.*/
+
 jobs:
     build-n-test:
         <<: *default-work-env
@@ -81,7 +87,7 @@ workflows:
                     branches:
                         ignore: main
 
-    tagged-release:
+    publish-release-tag:
         jobs:
             - vro/publish-changelog: #publish-changelog
                   context: orb-publishing
@@ -94,6 +100,10 @@ workflows:
                   requires: [ vro/publish-changelog ]
                   context: orb-publishing
                   pre-steps: [ checkout, attach_workspace: { at: '.' } ]
+
+    on-tag-release:
+        jobs:
             - publish-image:
-                  requires: [ vro/tag-and-release ]
                   context: orb-publishing
+                  filters:
+                      <<: *filter-semantic-tag
