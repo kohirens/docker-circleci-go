@@ -3,11 +3,12 @@
 
 
 <a name="0.1.0"></a>
-## 0.1.0 - 2022-04-22
+## 0.1.0 - 2022-04-29
 ### Added
 - CircleCI Go image.
 
 ### Changed
+- Upgraded to Version Release Orb 1.0.5.
 - Upgrade to VRO 1.0.4.
 - Upgraded to version release Orb version 1.0.3.
 - Upgraded to version release orb to 1.0.1.
