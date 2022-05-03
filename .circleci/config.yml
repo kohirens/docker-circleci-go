@@ -13,6 +13,10 @@ parameters:
         description: Trigger publishing a release tag workflow.
         type: boolean
         default: false
+    triggered-by-bot:
+        description: Trigger publishing a release tag workflow.
+        type: boolean
+        default: false
 
 # Anchors
 default-work-env: &default-work-env
@@ -94,18 +98,25 @@ workflows:
 
     # Everything that should be done before production should precede this workflow.
     publish-changelog: # Run ONLY on main
+        when:
+            and:
+                - equal: [main, << pipeline.git.branch >>]
+                - << pipeline.parameters.triggered-by-bot >>
         jobs:
             - vro/publish-changelog:
                 context: orb-publishing
                 filters: { branches: { only: main } }
-                pre-steps: [ checkout, attach_workspace: { at: '.' } ]
+                pre-steps:
+                    - checkout
+                    - attach_workspace: { at: '.' }
+                    - run: echo "trigger source << pipeline.trigger_source >>"
                 sshFinger: << pipeline.parameters.ssh-finger >>
 
     publish-release-tag: # Run ONLY on main when kicked-off by publish-changelog workflow.
         when:
             and:
                 - equal: [main, << pipeline.git.branch >>]
-                - << pipeline.parameters.trigger-tagging >>
+                - << pipeline.parameters.triggered-by-bot >>
                 - matches:
                       pattern: "^api|webhook$"
                       value: << pipeline.trigger_source >>
