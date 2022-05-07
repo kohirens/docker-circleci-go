@@ -9,10 +9,6 @@ parameters:
         description: SSH fingerprint.
         type: string
         default: "3e:01:4a:ba:a7:78:bc:2c:e1:1b:01:71:d5:d7:78:87"
-    trigger-tagging:
-        description: Trigger publishing a release tag workflow.
-        type: boolean
-        default: false
     triggered-by-bot:
         description: Trigger publishing a release tag workflow.
         type: boolean
@@ -97,7 +93,7 @@ workflows:
                         ignore: /main|updated-changelog-skip-ci|auto-update-changelog/
 
     # Everything that should be done before production should precede this workflow.
-    publish-changelog: # Run ONLY on main
+    publish-changelog: # Run ONLY on main and when triggered-by-bot is true.
         when:
             and:
                 - equal: [main, << pipeline.git.branch >>]
@@ -107,8 +103,6 @@ workflows:
                 context: orb-publishing
                 filters: { branches: { only: main } }
                 pre-steps:
-                    - checkout
-                    - attach_workspace: { at: '.' }
                     - run: echo "trigger source << pipeline.trigger_source >>"
                 sshFinger: << pipeline.parameters.ssh-finger >>
 
