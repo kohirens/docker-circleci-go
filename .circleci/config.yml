@@ -5,11 +5,11 @@ orbs:
 
 # also see: https://circleci.com/docs/2.0/pipeline-variables/
 parameters:
-    ssh-finger:
+    ssh_finger:
         description: SSH fingerprint.
         type: string
         default: "3e:01:4a:ba:a7:78:bc:2c:e1:1b:01:71:d5:d7:78:87"
-    triggered-by-bot:
+    triggered_by_bot:
         description: Trigger publishing a release tag workflow.
         type: boolean
         default: false
@@ -62,11 +62,12 @@ jobs:
             - run:
                   name: Push Docker image
                   command: |
-                      if [ ! -f ./tagged.txt ]; then
-                          echo "cannot publish a Docker image, release-tag file not found"
+                      echo "Publishing tag << pipeline.git.tag >>"
+                      export BUILD_VER="<< pipeline.git.tag >>"
+                      if [ -z ${BUILD_VER}" ]; then
+                          echo "cannot publish a Docker image, release-tag is empty"
                           exit 1
                       fi
-                      export BUILD_VER=$(cat "tagged.txt")
                       export DH_IMAGE="${DH_IMG_REPO}:${BUILD_VER}"
                       echo "${DH_PASS}" | docker login -u "${DH_USER}" --password-stdin
                       echo ""
@@ -90,27 +91,27 @@ workflows:
                 context: orb-publishing
                 filters:
                     branches:
-                        ignore: /main|updated-changelog-skip-ci|auto-update-changelog/
+                        ignore: /main|auto-update-changelog/
 
     # Everything that should be done before production should precede this workflow.
-    publish-changelog: # Run ONLY on main and when triggered-by-bot is true.
+    publish-changelog: # Run ONLY on main and when triggered_by_bot is true.
         when:
             and:
                 - equal: [main, << pipeline.git.branch >>]
-                - << pipeline.parameters.triggered-by-bot >>
+                - << pipeline.parameters.triggered_by_bot >>
         jobs:
             - vro/publish-changelog:
                 context: orb-publishing
                 filters: { branches: { only: main } }
                 pre-steps:
                     - run: echo "trigger source << pipeline.trigger_source >>"
-                sshFinger: << pipeline.parameters.ssh-finger >>
+                ssh_finger: << pipeline.parameters.ssh_finger >>
 
     publish-release-tag: # Run ONLY on main when kicked-off by publish-changelog workflow.
         when:
             and:
                 - equal: [main, << pipeline.git.branch >>]
-                - << pipeline.parameters.triggered-by-bot >>
+                - << pipeline.parameters.triggered_by_bot >>
                 - matches:
                       pattern: "^api|webhook$"
                       value: << pipeline.trigger_source >>
@@ -118,7 +119,6 @@ workflows:
             - vro/tag-and-release:
                 context: orb-publishing
                 filters: { branches: { only: main } }
-                pre-steps: [ checkout, attach_workspace: { at: '.' } ]
                 requires: [ vro/publish-changelog ]
 
     # Everything that should go to production should proceed this workflow.
