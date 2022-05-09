@@ -98,7 +98,7 @@ workflows:
         when:
             and:
                 - equal: [main, << pipeline.git.branch >>]
-                - << pipeline.parameters.triggered_by_bot >>
+#                - equal: [webhook, << pipeline.trigger_source >>]
         jobs:
             - vro/publish-changelog:
                 context: orb-publishing
@@ -119,6 +119,8 @@ workflows:
             - vro/tag-and-release:
                 context: orb-publishing
                 filters: { branches: { only: main } }
+                pre-steps:
+                    - run: echo "trigger source << pipeline.trigger_source >>"
                 requires: [ vro/publish-changelog ]
 
     # Everything that should go to production should proceed this workflow.
