@@ -121,7 +121,6 @@ workflows:
                 filters: { branches: { only: main } }
                 pre-steps:
                     - run: echo "trigger source << pipeline.trigger_source >>"
-                requires: [ vro/publish-changelog ]
 
     # Everything that should go to production should proceed this workflow.
     on-tag-release: # Run only on release tags.
