@@ -98,7 +98,7 @@ workflows:
         when:
             and:
                 - equal: [main, << pipeline.git.branch >>]
-#                - equal: [webhook, << pipeline.trigger_source >>]
+                - equal: [webhook, << pipeline.trigger_source >>]
         jobs:
             - vro/publish-changelog:
                 context: orb-publishing
