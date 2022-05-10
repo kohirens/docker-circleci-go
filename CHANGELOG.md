@@ -8,6 +8,7 @@
 - triggered-by-bot pipeline parameter to CI.
 
 ### Changed
+- Removed obsolete requirment from publish tag job.
 - Add check for webhook to publish-changelog job.
 - Trigger publish changelog on main brancg when initiated from a webhook.
 - Removed redundant checkout and attach from publish-changelog job.
