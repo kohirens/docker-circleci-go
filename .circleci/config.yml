@@ -64,7 +64,7 @@ jobs:
                   command: |
                       echo "Publishing tag << pipeline.git.tag >>"
                       export BUILD_VER="<< pipeline.git.tag >>"
-                      if [ -z ${BUILD_VER}" ]; then
+                      if [ -z "${BUILD_VER}" ]; then
                           echo "cannot publish a Docker image, release-tag is empty"
                           exit 1
                       fi
