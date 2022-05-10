@@ -3,11 +3,12 @@
 
 
 <a name="0.2.0"></a>
-## [0.2.0] - 2022-05-09
+## [0.2.0] - 2022-05-10
 ### Added
 - triggered-by-bot pipeline parameter to CI.
 
 ### Changed
+- Add check for webhook to publish-changelog job.
 - Trigger publish changelog on main brancg when initiated from a webhook.
 - Removed redundant checkout and attach from publish-changelog job.
 
