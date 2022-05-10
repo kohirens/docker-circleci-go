@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="0.2.1"></a>
+## [0.2.1] - 2022-05-10
+### Fixed
+- Auto publishing a new image on tag release in the CI.
+
+
 <a name="0.2.0"></a>
 ## [0.2.0] - 2022-05-10
 ### Added
@@ -26,5 +32,6 @@
 - Upgraded to version release orb to 1.0.1.
 
 
-[Unreleased]: https://github.com/kohirens/docker-circleci-go.git/compare/0.2.0...HEAD
+[Unreleased]: https://github.com/kohirens/docker-circleci-go.git/compare/0.2.1...HEAD
+[0.2.1]: https://github.com/kohirens/docker-circleci-go.git/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/kohirens/docker-circleci-go.git/compare/0.1.0...0.2.0
