@@ -1,4 +1,4 @@
-#STAGE: Install Tool for CircleCI plus some
+#STAGE: Install Tool for CircleCI environment plus some
 FROM khalifahks/alpine-glibc:2.34-r0 AS base
 
 ARG GH_CLI_VER='2.5.2'
