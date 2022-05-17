@@ -9,6 +9,17 @@ For Linux, Mac, and Windows do:
 ```shell
 docker compose build --progress plain
 ```
+ or
+
+```shell
+docker build --rm --no-cache -t kohirens/circleci-go:dev .
+```
+
+Then test with:
+
+```shell
+docker run -it --rm  kohirens/circleci-go:dev go version
+```
 
 ## References
 
