@@ -23,7 +23,7 @@ default-work-env: &default-work-env
 
 default-env-vars: &default-env-vars
     DH_IMG_REPO: "kohirens/circleci-go"
-    DH_CONTAINER: "circle-go-node-1"
+    DH_CONTAINER: "circleci-go-node-1"
 
 filter-semantic-tag: &filter-semantic-tag
     tags:
