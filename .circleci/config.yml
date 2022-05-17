@@ -49,6 +49,7 @@ jobs:
                   command: |
                       docker run -it --rm "${DH_IMG_REPO}" go version
                       docker run -it --rm "${DH_IMG_REPO}" git --version
+                      docker run -it --rm "${DH_IMG_REPO}" docker --version
 
     publish-image:
         <<: *default-work-env

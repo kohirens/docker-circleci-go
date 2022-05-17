@@ -7,6 +7,7 @@ ARG GTB_CLI_VER='1.2.9'
 RUN apk --progress --purge --no-cache upgrade \
  && apk --no-progress --purge --no-cache add --upgrade \
     bash \
+    docker \
     git \
     openssh \
     tar \
