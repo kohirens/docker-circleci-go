@@ -40,7 +40,7 @@ COPY ./start.sh /usr/local/bin
 
 RUN chmod +x /usr/local/bin/start.sh
 
-SHELL [ "bash" ]
+SHELL [ "/bin/bash", "-c" ]
 
 ENTRYPOINT [ ]
 
