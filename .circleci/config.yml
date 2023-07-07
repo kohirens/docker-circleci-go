@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-    vro: kohirens/version-release@dev:alpha
+    vro: kohirens/version-release@2.3.5
 
 # also see: https://circleci.com/docs/2.0/pipeline-variables/
 parameters:
@@ -24,6 +24,7 @@ default-work-env: &default-work-env
 default-env-vars: &default-env-vars
     DH_IMG_REPO: "kohirens/circleci-go"
     DH_CONTAINER: "circleci-go-node-1"
+    DOCKER_BUILDKIT: 1
 
 filter-semantic-tag: &filter-semantic-tag
     tags:
@@ -57,8 +58,7 @@ jobs:
             <<: *default-env-vars
         steps:
             - checkout
-            - setup_remote_docker:
-                  version: 20.10.11
+            - setup_remote_docker
             - run:
                   name: Push Docker image
                   command: |

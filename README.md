@@ -2,6 +2,10 @@
 
 A Golang image for CircleCI.
 
+## Status
+
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/kohirens/docker-circleci-go/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/kohirens/docker-circleci-go/tree/main)
+
 ## Build
 
 For Linux, Mac, and Windows do:
