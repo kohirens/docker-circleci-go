@@ -1,6 +1,10 @@
-# Alpine CCI
+# Docker CircleCI Go
 
-A Golang image for CircleCI.
+A Golang image for CircleCI. The image also has a few tool baked in that the
+official CircleCI image does not have, such as:
+
+* [Kohirens Git-tool-belt]
+* [GitHub CLI]
 
 ## Status
 
