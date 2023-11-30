@@ -40,8 +40,6 @@ RUN apk --progress --purge --no-cache upgrade \
 
 COPY ./start.sh /usr/local/bin
 
-RUN chmod +x /usr/local/bin/start.sh
-
 SHELL [ "/bin/bash", "-c" ]
 
 ENTRYPOINT [ ]
