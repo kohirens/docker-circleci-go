@@ -1,6 +1,6 @@
 # Docker CircleCI Go
 
-A Golang image for CircleCI. The image also has a few tool baked in that the
+A Golang image for CircleCI with a few tools baked in that the
 official CircleCI image does not have, such as:
 
 * [Kohirens Git-tool-belt]
@@ -32,3 +32,8 @@ docker run -it --rm  kohirens/circleci-go:dev go version
 ## References
 
  * [Alpine Add Package from Edge repository](https://stackoverflow.com/questions/52899227/alpine-add-package-from-edge-repository)
+
+---
+
+[Kohirens Git-tool-belt]: https://github.com/kohirens/git-tool-belt
+[GitHub CLI]: https://cli.github.com/
