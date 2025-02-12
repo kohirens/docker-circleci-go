@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-    vr: kohirens/version-release@dev:alpha
+    vr: kohirens/version-release@4.4.4
 
 # also see: https://circleci.com/docs/2.0/pipeline-variables/
 parameters:
@@ -15,10 +15,6 @@ parameters:
         description: SSH fingerprint.
         type: string
         default: "3e:01:4a:ba:a7:78:bc:2c:e1:1b:01:71:d5:d7:78:87"
-    triggered_by_bot:
-        description: Trigger publishing a release tag workflow.
-        type: boolean
-        default: false
     triggered_flow:
         default: "workflow-selector"
         description: Workflow to be executed.
@@ -28,7 +24,7 @@ parameters:
 default-work-env: &default-work-env
     working_directory: ~/src
     docker:
-        - image: docker:20.10.13-git
+        - image: cimg/base:current
     resource_class: small
 
 default-env-vars: &default-env-vars
@@ -49,8 +45,7 @@ jobs:
             <<: *default-env-vars
         steps:
             - checkout
-            - setup_remote_docker:
-                  version: 20.10.11
+            - setup_remote_docker
             - run:
                   name: "Build Docker image"
                   command: |
