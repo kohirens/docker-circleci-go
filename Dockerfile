@@ -5,7 +5,7 @@ ARG GH_CLI_VER='2.31.0'
 ARG GTB_CLI_VER='2.1.2'
 
 RUN apk --progress --purge --no-cache upgrade \
- && apk --no-progress --purge --no-cache add --upgrade \
+ && apk --no-progress --purge --no-cache add --upgrade --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community\
     bash \
     curl \
     docker \
