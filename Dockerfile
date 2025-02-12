@@ -1,7 +1,7 @@
 #STAGE: Install Tool for CircleCI environment plus some
 FROM kohirens/alpine-glibc:3.19-2.39 AS base
 
-ARG GH_CLI_VER='2.31.0'
+ARG GH_CLI_VER='2.67.0'
 ARG GTB_CLI_VER='2.1.2'
 
 RUN apk --progress --purge --no-cache upgrade \
